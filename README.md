@@ -12,9 +12,9 @@
 <li>стэк технологий</li>
 </ol>
 <ol>
-<ol>backend:</ol>
+<p>backend:<br />
+<span style="text-align: justify;">Django~=4.0.10 pillow~=9.5.0 sorl-thumbnail~=12.9.0 python-dotenv~=1.0.0 djangorestframework~=3.14.0 django-filter~=23.2 drf-extra-fields~=3.5.0 gunicorn~=20.1.0 psycopg2-binary~=2.9.6</span></p>
 </ol>
-<p><br /><span style="text-align: justify;">Django~=4.0.10 pillow~=9.5.0 sorl-thumbnail~=12.9.0 python-dotenv~=1.0.0 djangorestframework~=3.14.0 django-filter~=23.2 drf-extra-fields~=3.5.0 gunicorn~=20.1.0 psycopg2-binary~=2.9.6</span></p>
 <ol>
 <li>ссылки на сторонние фреймворки, библиотеки, иконки и шрифты если использовались</li>
 <li>ключевые точки для media queries</li>
