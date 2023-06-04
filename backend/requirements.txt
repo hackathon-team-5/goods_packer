@@ -1,13 +1,14 @@
-asyncpg~=0.27.0
-databases[postgresql]~=0.7.0
-psycopg2-binary~=2.9.6
-fastapi~=0.95.2
-SQLAlchemy~=1.4.48
-uvicorn~=0.22.0
+# Djando + util
+Django~=4.0.10
+pillow~=9.5.0
+sorl-thumbnail~=12.9.0
 python-dotenv~=1.0.0
-alembic~=1.11.1
 
-passlib~=1.7.4
-pyjwt~=2.7.0
+# REST API
+djangorestframework~=3.14.0
+django-filter~=23.2
+drf-extra-fields~=3.5.0
 
-httpx~=0.24.1
+# Django productions
+gunicorn~=20.1.0
+psycopg2-binary~=2.9.6

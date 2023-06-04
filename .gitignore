@@ -34,6 +34,7 @@ MANIFEST
 *.spec
 
 # Installer logs
+*.log
 pip-log.txt
 pip-delete-this-directory.txt
 
@@ -56,11 +57,9 @@ coverage.xml
 *.pot
 
 # Django stuff:
-*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-db.json
 
 # Flask stuff:
 instance/
@@ -129,27 +128,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Папки, создаваемые средой разработки
+# .idea
 .idea
-.DS_Store
-.AppleDouble
-.LSOverride
 
-*.sublime-project
-*.sublime-workspace
-
-.vscode/
-*.code-workspace
-
-# Local History for Visual Studio Code
-.history/
-
-.mypy_cache
-
-# cert
-ssl/
-
+media/
+migrations/
 
 docker-compose-debug.yml
-Dockerfile_dev
-logs
+Dockerfile-debug
+db.json
+.vscode
