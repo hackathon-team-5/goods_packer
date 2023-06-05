@@ -2,7 +2,7 @@ import secrets
 import string
 
 
-def get_key(length: int) -> str:
+def key_generator(length: int) -> str:
     """
     This is a function that generates a random key of a specified length.
     The key is made up of a combination of digits and letters
