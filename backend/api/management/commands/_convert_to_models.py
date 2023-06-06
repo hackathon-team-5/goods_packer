@@ -3,6 +3,8 @@ from pathlib import Path
 import pandas as pd
 from api.models import CargotypeInfo, Carton, CartonPrice, Sku, SkuCargotypes
 
+from .cleaners import nonzero, random_float
+
 HOME_PATH = f'{Path.home()}/Desktop/data'
 
 
@@ -44,10 +46,10 @@ MODEL_DATA = {
     Sku: {
         'type': pd.read_csv,
         'file_name': 'sku.csv',
-        'model_fields': ['sku', 'length', 'width', 'height'],
-        'file_fields': ['sku', 'a', 'b', 'c'],
-        'cleaner': [str, float, float, float],
-        'getter': [None, None, None, None],
+        'model_fields': ['sku', 'a', 'b', 'c', 'weight'],
+        'file_fields': ['sku', 'a', 'b', 'c', 'weight'],
+        'cleaner': [str, nonzero, nonzero, nonzero, random_float],
+        'getter': [None, None, None, None, None],
     },
     SkuCargotypes: {
         'type': pd.read_csv,
@@ -55,9 +57,7 @@ MODEL_DATA = {
         'model_fields': ['sku', 'cargotype'],
         'file_fields': ['sku', 'cargotype'],
         'cleaner': [str, int],
-        'getter': [
-            None, None, None, None, None
-        ],
+        'getter': [[Sku, 'sku'], [CargotypeInfo, 'cargotype']],
     },
 }
 
@@ -72,7 +72,6 @@ def convert_to_models():
     If any error occurs during the process, it is added to the result list
     and returned at the end.
     """
-
     result = []
     for model, model_data in MODEL_DATA.items():
         try:
@@ -81,7 +80,7 @@ def convert_to_models():
             for _, row in data.iterrows():
                 clean_row = model(**{
                     model_fields: (
-                        getter[0].objects.get(**{getter[1]: row[file_field]})
+                        getter[0].objects.get_or_create(**{getter[1]: row[file_field]})[0]
                         if getter else cleaner(row[file_field])
                     )
                     for model_fields, file_field, cleaner, getter in zip(
@@ -94,5 +93,5 @@ def convert_to_models():
                 clean_data.append(clean_row)
             model.objects.bulk_create(clean_data)
         except Exception as error:
-            result.extend(['error', error])
+            result.extend(['error', f'{model}: {error}'])
     return result

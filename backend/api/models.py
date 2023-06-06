@@ -61,7 +61,7 @@ class CartonPrice(CreateUpdate):
         on_delete=models.CASCADE,
         related_name='carton_prices'
     )
-    cost = models.FloatField(
+    price = models.FloatField(
         _('стоимость'),
         default=0,
     )
@@ -80,16 +80,20 @@ class Sku(Create):
         max_length=256,
         unique=True,
     )
-    length = models.FloatField(
+    a = models.FloatField(
         _('длина'),
         default=0,
     )
-    width = models.FloatField(
+    b = models.FloatField(
         _('ширина'),
         default=0,
     )
-    height = models.FloatField(
+    c = models.FloatField(
         _('высота'),
+        default=0,
+    )
+    weight = models.FloatField(
+        _('вес'),
         default=0,
     )
     image = ImageField(

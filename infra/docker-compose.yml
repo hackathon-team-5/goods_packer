@@ -39,6 +39,15 @@ services:
     env_file:
       - ./.env
 
+  # ml:
+  #   image: ${DOCKER_USERNAME}/foodgram-frontend:latest
+  #   volumes:
+  #     - frontend_volume:/app/result_build/build/:rw
+  #   depends_on:
+  #     - backend
+  #   env_file:
+  #     - ./.env
+
   nginx:
     image: nginx:latest
     restart: unless-stopped
