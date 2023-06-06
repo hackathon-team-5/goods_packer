@@ -92,7 +92,7 @@ class Sku(Create):
         _('высота'),
         default=0,
     )
-    weight = models.FloatField(
+    goods_wght = models.FloatField(
         _('вес'),
         default=0,
     )
