@@ -46,7 +46,7 @@ MODEL_DATA = {
     Sku: {
         'type': pd.read_csv,
         'file_name': 'sku.csv',
-        'model_fields': ['sku', 'a', 'b', 'c', 'weight'],
+        'model_fields': ['sku', 'a', 'b', 'c', 'goods_wght'],
         'file_fields': ['sku', 'a', 'b', 'c', 'weight'],
         'cleaner': [str, nonzero, nonzero, nonzero, random_float],
         'getter': [None, None, None, None, None],
