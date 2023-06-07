@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from fastapi import APIRouter, status
 from model import predict_1_item, predict_many_items
@@ -25,16 +26,14 @@ def get_prediction(request: Order):
             'sku', 'count', 'a', 'b', 'c', 'goods_wght', 'cargotype'
         ]
     )
-    for column in IMPOTENT_CARGOTYPE:
-        df_items[column] = ''
-
+    df_items[IMPOTENT_CARGOTYPE] = ''
     cargotypes = [20, 910, 315, 340, 310, 360, 210, 303]
 
     for item in range(len(cargotypes)):
         column_name = 'cargotype_' + str(cargotypes[item])
         amount = cargotypes[item]
-        df_items[column_name] = df_items.apply(
-            lambda x: 1 if amount in x['cargotype'] else 0, axis=1
+        df_items[column_name] = np.where(
+            df_items['cargotype'].apply(lambda x: amount in x), 1, 0
         )
 
     df_items = df_items.drop('cargotype', axis=1)
@@ -44,15 +43,15 @@ def get_prediction(request: Order):
     )
     if len(items) == 1:
         df_items = df_items.drop('count', axis=1)
-        y = predict_1_item(df_items)
+        response = predict_1_item(df_items)
     else:
         df_items = df_items.rename(
             columns={'count': 'count_items'}
         )
-        y = predict_many_items(df_items)
+        response = predict_many_items(df_items)
 
     return {
         'orderId': request.orderkey,
-        'package': y,
-        'status': status.HTTP_200_OK
+        'package': response[0],
+        'status': response[1]
     }
