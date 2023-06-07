@@ -22,7 +22,7 @@ def predict_1_item(x):
     try:
         result = model.predict(x)
     except Exception as error:
-        return f'Predict: {error}'
+        return f'Ошибка в predict_1_item: {error}'
 
     return result
 
@@ -53,6 +53,6 @@ def predict_many_items(x):
         result = model3.predict(x_1)
 
     except Exception as error:
-        return f'Predict: {error}'
+        return f'Ошибка в predict_many_items: {error}'
 
     return result
