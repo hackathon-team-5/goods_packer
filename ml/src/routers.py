@@ -19,14 +19,14 @@ def health():
 
 @router.post('/pack')
 def get_prediction(request: Order):
-    items = []
+    items = request.items
     df_items = pd.DataFrame(
         items, columns=[
             'sku', 'count', 'a', 'b', 'c', 'goods_wght', 'cargotype'
         ]
     )
     for column in IMPOTENT_CARGOTYPE:
-        df_items[column] = ""
+        df_items[column] = ''
 
     cargotypes = [20, 910, 315, 340, 310, 360, 210, 303]
 
@@ -37,18 +37,18 @@ def get_prediction(request: Order):
             lambda x: 1 if amount in x['cargotype'] else 0, axis=1
         )
 
-    df_items = df_items.rename(
-        columns={'count': 'count_items'}
-    )
     df_items = df_items.drop('cargotype', axis=1)
-
-    df_items['pack_volume'] = (
-        df_items['a'] * df_items['b'] * df_items['c']
-    ).astype('int')
-
+    df_items['pack_volume'] = df_items.apply(
+        lambda x: round(x['a'][1] * x['b'][1] * x['c'][1], 2),
+        axis=1
+    )
     if len(items) == 1:
-        y = predict_1_item(df_items.drop('count_items'))
+        df_items = df_items.drop('count', axis=1)
+        y = predict_1_item(df_items)
     else:
+        df_items = df_items.rename(
+            columns={'count': 'count_items'}
+        )
         y = predict_many_items(df_items)
 
     return {
