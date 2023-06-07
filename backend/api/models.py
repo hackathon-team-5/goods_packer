@@ -80,15 +80,15 @@ class Sku(Create):
         max_length=256,
         unique=True,
     )
-    a = models.FloatField(
+    length = models.FloatField(
         _('длина'),
         default=0,
     )
-    b = models.FloatField(
+    width = models.FloatField(
         _('ширина'),
         default=0,
     )
-    c = models.FloatField(
+    height = models.FloatField(
         _('высота'),
         default=0,
     )
@@ -117,6 +117,7 @@ class Sku(Create):
 
 
 class SkuCargotypes(models.Model):
+    objects = None
     sku = models.ForeignKey(
         Sku,
         on_delete=models.CASCADE,
