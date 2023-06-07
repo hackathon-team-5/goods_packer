@@ -1,29 +1,36 @@
 import React from "react";
 import Product from "../Product";
 import "./Card.css";
-import speaker from "../../images/pic_product.png";
 
-const codes = ["9234 5678 234 32"];
-
-const Card = () => {
+const Card = (props) => {
+  const { data } = props;
   return (
     <div className="card-container">
-      <h4 className="card-container__title">Упаковка 1</h4>
+      <h4 className="card-container__title">Упаковка {data.packageInfo.id}</h4>
       <ul className="card-container__list">
         <li className="card-container__list-item">
-          <p className="card-container__list-item-paragraph">4 товара</p>
+          <p className="card-container__list-item-paragraph">
+            {data.packageInfo.count} товара
+          </p>
         </li>
         <li className="card-container__list-item card-container__list-item_type">
-          <p className="card-container__list-item-paragraph">Коробка YMA</p>
+          <p className="card-container__list-item-paragraph">
+            Коробка {data.packageInfo.type}
+          </p>
         </li>
       </ul>
-      <Product
-        title="Умная колонка Яндекс Станция Лайт, ультрафиолет"
-        cardImg={speaker}
-        type="Пузырчатая плёнка"
-        codes={codes}
-        count={1}
-      />
+      {data.products.map((card, index) => {
+        return (
+          <Product
+            key={index}
+            title={card.title}
+            cardImg={card.image}
+            type={card.type}
+            codes={card.barcode}
+            count={card.count}
+          />
+        );
+      })}
     </div>
   );
 };

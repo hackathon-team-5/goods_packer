@@ -1,12 +1,22 @@
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Content from "./components/Content";
-import Header from "./components/Header";
+import Main from "./pages/Main";
+import Skanning from "./pages/Skanning";
+import Completion from "./pages/Completion";
+
+import data from "./products.json";
 
 function App() {
   return (
     <div className="app">
-      <Header />
-      <Content />
+      <Routes>
+        <Route path="/" element={<Main data={data} />} />
+        <Route
+          path="/scan"
+          element={<Skanning typeBox={data.packageInfo.type} />}
+        />
+        <Route path="/completetion" element={<Completion />} />
+      </Routes>
     </div>
   );
 }

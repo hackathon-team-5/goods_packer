@@ -3,7 +3,8 @@ import "./Content.css";
 import Progressbar from "../ProgressBar";
 import Card from "../Card";
 
-const Content = () => {
+const Content = (props) => {
+  const { data } = props;
   return (
     <section className="content">
       <button className="big-button content__issue-button">
@@ -21,7 +22,7 @@ const Content = () => {
         <ul className="content__info-container-list">
           <li className="content__info-container-list-item">
             <p className="content__info-container-list-item-paragraph">
-              6 товаров
+              {data.packageInfo.count} товаров
             </p>
           </li>
           <li className="content__info-container-list-item">
@@ -30,7 +31,7 @@ const Content = () => {
             </p>
           </li>
         </ul>
-        <Card />
+        <Card data={data} />
       </div>
       <button className="big-button content__sucess-button">
         Закрыть упаковку

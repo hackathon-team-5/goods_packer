@@ -1,6 +1,7 @@
 .content {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 180px;
 }
 
 .content__info-container-title {
@@ -32,7 +33,7 @@
 }
 
 .content__info-container-title_number {
-  margin: 4px 0 0 0;
+  margin: 4px 0 12px 0;
   padding: 0;
   font-family: YandexSansText-Bold;
   font-size: 72px;
