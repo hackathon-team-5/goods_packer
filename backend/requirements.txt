@@ -17,3 +17,6 @@ djoser~=2.2.0
 # Django productions
 gunicorn~=20.1.0
 psycopg2-binary~=2.9.6
+
+# Swagger generator
+drf-yasg==1.21.5
