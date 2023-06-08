@@ -1,0 +1,96 @@
+.content {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 180px;
+}
+
+.content__info-container-title {
+  margin: 56px 0 24px 0;
+  padding: 0;
+  font-family: YandexSansDisplay-Regular;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28px;
+
+  color: #878787;
+
+  text-align: center;
+}
+
+.content__info-container-progress-bar {
+  display: flex;
+  justify-content: center;
+}
+
+.content__info-container-title_second {
+  margin: 60px 0 0 0;
+  padding: 0;
+  font-family: YandexSansText-Bold;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 60px;
+  text-align: center;
+}
+
+.content__info-container-title_number {
+  margin: 4px 0 12px 0;
+  padding: 0;
+  font-family: YandexSansText-Bold;
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 92px;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.big-button {
+  all: unset;
+  margin: 84px 0 0 0;
+  padding: 0;
+  width: 296px;
+  height: 662px;
+  background-color: #f3f0e9;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: YandexSansDisplay-Bold;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 60px;
+  text-align: center;
+}
+
+.content__issue-button {
+  margin-left: 24px;
+}
+
+.content__sucess-button {
+  margin-right: 24px;
+}
+
+.content__info-container-list {
+  margin: 0 0 60px 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+.content__info-container-list-item {
+  background-color: #f3f0e9;
+  border-radius: 100px;
+  padding: 12px 24px;
+}
+
+.content__info-container-list-item:not(:last-child) {
+  margin-right: 16px;
+}
+
+.content__info-container-list-item-paragraph {
+  margin: 0;
+  padding: 0;
+  font-family: YandexSansText-Medium;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
