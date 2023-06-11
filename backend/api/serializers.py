@@ -1,5 +1,7 @@
-from rest_framework import serializers
 from typing import OrderedDict
+
+from rest_framework import serializers
+
 from .models import (CargotypeInfo, Carton, CartonPrice, Order, Sku,
                      SkuCargotypes, SkuInWhs, Whs)
 
