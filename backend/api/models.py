@@ -2,7 +2,6 @@ from core.models import Create, CreateUpdate
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from sorl.thumbnail import ImageField
 
 User = get_user_model()
 
@@ -70,8 +69,15 @@ class CartonPrice(CreateUpdate):
         verbose_name = _('стоимость упаковки')
         verbose_name_plural = _('стоимость упаковок')
 
+        constraints = (
+            models.UniqueConstraint(
+                fields=('carton',),
+                name='%(app_label)s_%(class)s_carton_unique',
+            ),
+        )
+
     def __str__(self):
-        return f'{self.carton} - {self.cost}'
+        return f'{self.carton} - {self.price}'
 
 
 class Sku(Create):
@@ -96,14 +102,12 @@ class Sku(Create):
         _('вес'),
         default=0,
     )
-    image = ImageField(
-        verbose_name=_('Картинка'),
-        upload_to='sku_images/',
-        null=True,
-        blank=True,
+    image = models.CharField(
+        _('URL на картинку'),
+        max_length=256,
     )
     description = models.TextField(
-        verbose_name=_('описание'),
+        _('описание'),
         null=True,
         blank=True,
     )
@@ -140,9 +144,51 @@ class SkuCargotypes(models.Model):
         )
 
 
+class Whs(models.Model):
+    whs = models.CharField(
+        _('название сортировочного центра'),
+        max_length=256,
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = _('количество товара на складе')
+        verbose_name_plural = _('количество товаров на складе')
+
+
+class SkuInWhs(CreateUpdate):
+    sku = models.ForeignKey(
+        Sku,
+        on_delete=models.CASCADE,
+        related_name='in_stock'
+
+    )
+    whs = models.ForeignKey(
+        Whs,
+        on_delete=models.CASCADE,
+        related_name='in_stock',
+    )
+    count = models.BigIntegerField(
+        _('количество'),
+    )
+
+    class Meta:
+        verbose_name = _('количество товара на складе')
+        verbose_name_plural = _('количество товаров на складе')
+        constraints = (
+            models.UniqueConstraint(
+                fields=('sku', 'whs'),
+                name='%(app_label)s_%(class)s_sku_whs_unique',
+            ),
+        )
+
+
 class Order(Create):
-    whs = models.IntegerField(
-        _('код сортировочного центра'),
+    whs = models.ForeignKey(
+        Whs,
+        on_delete=models.CASCADE,
+        related_name='orders',
+        verbose_name=_('код сортировочного центра'),
     )
     orderkey = models.CharField(
         _('id заказа'),
@@ -153,6 +199,8 @@ class Order(Create):
         on_delete=models.CASCADE,
         related_name='orders_selected_cartontype',
         verbose_name=_('код упаковки, которая была выбрана пользователем'),
+        null=True,
+        blank=True,
     )
     box_num = models.IntegerField(
         _('количество коробок'),
@@ -162,6 +210,8 @@ class Order(Create):
         on_delete=models.CASCADE,
         related_name='orders_recommended_cartontype',
         verbose_name=_('код упаковки, рекомендованной алгоритмом'),
+        null=True,
+        blank=True,
     )
     sel_calc_cube = models.IntegerField(
         _('объём выбранной упаковки'),
