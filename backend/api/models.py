@@ -168,7 +168,7 @@ class SkuInWhs(CreateUpdate):
         on_delete=models.CASCADE,
         related_name='in_stock',
     )
-    count = models.BigIntegerField(
+    amount = models.BigIntegerField(
         _('количество'),
     )
 
@@ -183,7 +183,12 @@ class SkuInWhs(CreateUpdate):
         )
 
 
-class Order(Create):
+class Order(CreateUpdate):
+    class Status(models.TextChoices):
+        FORMED = 'formed', _('Формируется')
+        COLLECTED = 'collected', _('Собирается')
+        READY = 'ready', _('Готов')
+
     whs = models.ForeignKey(
         Whs,
         on_delete=models.CASCADE,
@@ -228,7 +233,9 @@ class Order(Create):
     sku = models.ForeignKey(
         Sku,
         on_delete=models.CASCADE,
-        related_name='orders'
+        related_name='orders',
+        null=True,
+        blank=True,
     )
     who = models.ForeignKey(
         User,
@@ -240,6 +247,12 @@ class Order(Create):
         _('id доставки'),
         max_length=32,
     )
+    status = models.CharField(
+        _('Статус'),
+        max_length=9,
+        choices=Status.choices,
+        default=Status.FORMED
+    )
 
     class Meta:
         verbose_name = _('заказ')
@@ -247,3 +260,37 @@ class Order(Create):
 
     def __str__(self):
         return f'{self.orderkey}'
+
+
+class SkuInOrder(models.Model):
+
+    order = models.ForeignKey(
+        Order,
+        verbose_name=_('Ордер'),
+        related_name='qt_skus',
+        on_delete=models.CASCADE,
+    )
+    sku = models.ForeignKey(
+        Sku,
+        verbose_name=_('SKU'),
+        related_name='qt_orders',
+        on_delete=models.CASCADE,
+    )
+    amount = models.PositiveIntegerField(
+        _('Количество'),
+        default=0,
+    )
+
+    class Meta:
+        verbose_name = 'Sku in Order'
+        verbose_name_plural = 'Sku in Orders'
+        ordering = ('order', )
+        constraints = (
+            models.UniqueConstraint(
+                fields=('order', 'sku'),
+                name=('\n%(app_label)s_%(class)s_order_sku_unique'),
+            ),
+        )
+
+    def __str__(self) -> str:
+        return f'{self.order} {self.sku} {self.amount}'

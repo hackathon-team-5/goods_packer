@@ -1,10 +1,11 @@
 from typing import OrderedDict
 
-from rest_framework.serializers import ValidationError
+from api.models import Sku
+from rest_framework import serializers
 
 
 def field_validator(obj: OrderedDict,
-                    field_list: list) -> None | ValidationError:
+                    field_list: list) -> None | serializers.ValidationError:
     """
     This is a function that takes in two parameters, an ordered dictionary
     object and a list of fields. The purpose of this function is to validate
@@ -16,6 +17,25 @@ def field_validator(obj: OrderedDict,
     for field in field_list:
         check = obj.get(field)
         if not check or check == '':
-            raise ValidationError(
+            raise serializers.ValidationError(
                 {field: ['Обязательное поле.']}
             )
+
+
+def sku_validator(self, list_sku):
+    """
+
+    """
+    for item in list_sku:
+        sku = item['sku']
+        count = item['amount']
+        try:
+            sku_obj = Sku.objects.get(sku=sku)
+            sku_in_whs = sku_obj.in_stock.first()
+            if count > sku_in_whs.amount:
+                raise serializers.ValidationError(
+                    f'Insufficient stock for SKU: {sku}'
+                )
+        except Sku.DoesNotExist:
+            raise serializers.ValidationError(f'SKU not found: {sku}')
+    return list_sku
