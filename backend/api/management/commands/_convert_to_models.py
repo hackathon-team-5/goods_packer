@@ -71,7 +71,7 @@ MODEL_DATA = {
     SkuInWhs: {
         'type': pd.read_csv,
         'file_name': 'skuinwhs.csv',
-        'model_fields': ['sku', 'whs', 'count'],
+        'model_fields': ['sku', 'whs', 'amount'],
         'file_fields': ['sku', 'whs', 'count'],
         'cleaner': [str, str, random_float],
         'getter': [[Sku, 'sku'], [Whs, 'whs'], None],

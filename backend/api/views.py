@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from .models import CargotypeInfo, Carton, CartonPrice, Order, Sku
 from .serializers import (CargotypeInfoSerializer, CartonPriceSerializer,
-                          CartonSerializer, OrderSerializer,
+                          CartonSerializer, OrderCreateSerializer,
                           SkuCargotypesSerializer, SkuSerializer)
 
 
@@ -39,4 +39,4 @@ class SkuCargotypesViewSet(viewsets.ReadOnlyModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     permission_classes = (permissions.AllowAny,)
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
