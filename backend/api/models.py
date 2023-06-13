@@ -209,6 +209,7 @@ class Order(CreateUpdate):
     )
     box_num = models.IntegerField(
         _('количество коробок'),
+        default=0,
     )
     recommended_cartontype = models.ForeignKey(
         Carton,
@@ -220,15 +221,20 @@ class Order(CreateUpdate):
     )
     sel_calc_cube = models.IntegerField(
         _('объём выбранной упаковки'),
+        default=0,
     )
     pack_volume = models.IntegerField(
         _('рассчитанный объём упакованных товаров'),
+        default=0,
     )
     rec_calc_cube = models.IntegerField(
         _('(?)'),
+        null=True,
+        blank=True,
     )
     goods_wght = models.FloatField(
         _('вес товара'),
+        default=0,
     )
     sku = models.ForeignKey(
         Sku,
@@ -242,10 +248,13 @@ class Order(CreateUpdate):
         on_delete=models.CASCADE,
         related_name='orders',
         verbose_name=_('упаковщик'),
+        null=True,
+        blank=True,
     )
     trackingid = models.CharField(
         _('id доставки'),
         max_length=32,
+        blank=True,
     )
     status = models.CharField(
         _('Статус'),

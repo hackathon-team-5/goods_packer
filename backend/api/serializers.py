@@ -41,10 +41,21 @@ class CartonPriceSerializer(serializers.ModelSerializer):
         )
 
 
+class SkuCargotypesSerializer(serializers.ModelSerializer):
+    cargotype = CargotypeInfoSerializer()
+
+    class Meta:
+        model = SkuCargotypes
+        fields = (
+            'cargotype',
+        )
+
+
 class SkuSerializer(serializers.ModelSerializer):
     a = serializers.FloatField(source='length')
     b = serializers.FloatField(source='width')
     c = serializers.FloatField(source='height')
+    cargotypes = SkuCargotypesSerializer(many=True, source='sku_cargotypes')
 
     class Meta:
         model = Sku
@@ -55,24 +66,15 @@ class SkuSerializer(serializers.ModelSerializer):
             'c',
             'goods_wght',
             'image',
+            'cargotypes',
             'description'
-        )
-
-
-class SkuCargotypesSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = SkuCargotypes
-        fields = (
-            'sku',
-            'cargotype'
         )
 
 
 class SkuInOrderSerializer(serializers.ModelSerializer):
 
     id = serializers.ReadOnlyField(source='sku.id')
-    sku = serializers.ReadOnlyField(source='sku.sku')
+    sku = SkuSerializer(read_only=True)
 
     class Meta:
         model = SkuInOrder
@@ -84,7 +86,7 @@ class SkuInOrderSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    skus = serializers.SerializerMethodField(read_only=True)
+    skus = SkuInOrderSerializer(source='qt_skus', many=True, read_only=True)
 
     class Meta:
         model = Order
@@ -98,15 +100,10 @@ class OrderSerializer(serializers.ModelSerializer):
             'pack_volume',
             'rec_calc_cube',
             'goods_wght',
-            'sku',
+            'skus',
             'who',
             'trackingid',
         )
-
-    def get_skus(self, obj: Sku) -> OrderedDict:
-
-        queryset = obj.qt_skus.all()
-        return SkuInOrderSerializer(queryset, many=True).data
 
 
 class SkuInOrderCreateSerializer(serializers.ModelSerializer):
@@ -122,10 +119,11 @@ class SkuInOrderCreateSerializer(serializers.ModelSerializer):
 
 class OrderCreateSerializer(serializers.ModelSerializer):
     """
-    Сериализатор для создания и изменения ордеров.
+    Сериализатор для создания ордеров.
     """
     orderkey = serializers.ReadOnlyField()
     sku = SkuInOrderCreateSerializer(many=True)
+    trackingid = serializers.ReadOnlyField(source='id')
 
     class Meta:
         model = Order
@@ -149,7 +147,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         """
         Валидация полей.
         """
-        field_list = ['whs', 'who']
+        field_list = ['whs']
         field_validator(obj, field_list)
         sku_validator(self, obj.get('sku'))
         return obj
@@ -158,6 +156,8 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         skus_data = validated_data.pop('sku')
         order = Order.objects.create(**validated_data)
+        order.trackingid = order.id
+        order.save()
         objs = tuple(
             SkuInOrder(
                 order=order,
@@ -167,3 +167,6 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         )
         SkuInOrder.objects.bulk_create(objs)
         return order
+
+    def to_representation(self, instance):
+        return OrderSerializer(instance, context=self.context).data
