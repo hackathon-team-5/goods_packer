@@ -1,0 +1,71 @@
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgresql_volume:/var/lib/postgresql/data/:rw
+    env_file:
+      - ./.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: ${DOCKER_USERNAME}/goods_packer-backend:latest
+    restart: always
+    volumes:
+      - static_volume:/app/static/:rw
+      - media_volume:/app/media/:rw
+      - ./data/:/data/:rw
+    ports:
+     - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./.env
+
+  frontend:
+    image: ${DOCKER_USERNAME}/goods_packer-frontend:latest
+    volumes:
+      - frontend_volume:/app/result_build/build/:rw
+    depends_on:
+      - backend
+    env_file:
+      - ./.env
+
+  ml:
+    image: ${DOCKER_USERNAME}/goods_packer-ml:latest
+    ports:
+     - "8080:8080"
+    depends_on:
+      - backend
+    env_file:
+      - ./.env
+
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/:/etc/nginx/templates:rw
+      - frontend_volume:/usr/share/nginx/html/:ro      
+      - static_volume:/var/html/static/:rw
+      - media_volume:/var/html/media/:rw
+    depends_on:
+      - backend
+      - frontend
+    env_file:
+      - ./.env
+
+volumes:
+  postgresql_volume:
+  static_volume:
+  media_volume:
+  frontend_volume:
