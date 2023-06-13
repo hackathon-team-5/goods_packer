@@ -41,6 +41,10 @@ def get_prediction(request: Order):
         lambda x: round(x['a'][1] * x['b'][1] * x['c'][1], 2),
         axis=1
     )
+    df_items['sel_calc_cube'] = 0
+    df_items['selected_carton_price'] = 0
+    df_items['whs'] = 0
+    df_items = df_items.drop('sku', axis=1)
     if len(items) == 1:
         df_items = df_items.drop('count', axis=1)
         response = predict_1_item(df_items)
