@@ -1,11 +1,14 @@
+import json
+import uuid
 from typing import OrderedDict
 
+import requests
 from core.validators import field_validator, sku_validator
 from django.db import transaction
 from rest_framework import serializers
 
 from .models import (CargotypeInfo, Carton, CartonPrice, Order, Sku,
-                     SkuCargotypes, SkuInOrder, SkuInWhs, Whs)
+                     SkuCargotypes, SkuInOrder)
 
 
 class CartonSerializer(serializers.ModelSerializer):
@@ -108,7 +111,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class SkuInOrderCreateSerializer(serializers.ModelSerializer):
     """
-    Дополнительный сериализатор sku для поля sku.
+    Additional sku serializer.
     """
     sku = serializers.CharField()
 
@@ -119,7 +122,7 @@ class SkuInOrderCreateSerializer(serializers.ModelSerializer):
 
 class OrderCreateSerializer(serializers.ModelSerializer):
     """
-    Сериализатор для создания ордеров.
+    Serializer for creating orders.
     """
     orderkey = serializers.ReadOnlyField()
     sku = SkuInOrderCreateSerializer(many=True)
@@ -145,7 +148,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, obj: OrderedDict) -> OrderedDict:
         """
-        Валидация полей.
+        Validating.
         """
         field_list = ['whs']
         field_validator(obj, field_list)
@@ -154,19 +157,65 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
+        """
+        Creating and enriching an order.
+        """
         skus_data = validated_data.pop('sku')
         order = Order.objects.create(**validated_data)
-        order.trackingid = order.id
-        order.save()
-        objs = tuple(
-            SkuInOrder(
-                order=order,
-                sku=Sku.objects.get(sku=sku['sku']),
-                amount=sku['amount'])
-            for sku in skus_data
-        )
+        objs = []
+        ml_pack = {
+            'orderkey': order.id,
+            'items': []
+        }
+        for sku in skus_data:
+            sku_inst = Sku.objects.get(
+                sku=sku['sku']
+            )
+            ml_pack['items'].append(
+                {
+                    'sku': sku_inst.sku,
+                    'count': sku.get('amount'),
+                    'a': sku_inst.length,
+                    'b': sku_inst.width,
+                    'c': sku_inst.height,
+                    'goods_wght': sku_inst.goods_wght,
+                    'pack_volume': round(
+                        sku_inst.length * sku_inst.width * sku_inst.height,
+                        2
+                    ),
+                    'cargotype': list(
+                        sku_inst.sku_cargotypes.values_list(
+                            'cargotype', flat=True
+                        )
+                    )
+                }
+            )
+            order.goods_wght += sku_inst.goods_wght
+            order.pack_volume += ml_pack['items'][-1]['pack_volume']
+            objs.append(
+                SkuInOrder(
+                    order=order,
+                    sku=sku_inst,
+                    amount=sku['amount']
+                )
+            )
         SkuInOrder.objects.bulk_create(objs)
+        order.trackingid = order.id
+        order.orderkey = uuid.uuid4
+        response = requests.post(
+            url="http://127.0.0.1:8080/pack/",
+            json=ml_pack)
+        model_prediction = json.loads(response.text).get('package', None)
+        if model_prediction and isinstance(model_prediction, str):
+            order.recommended_cartontype = Carton.objects.filter(
+                cartontype=model_prediction
+            ).first()
+        order.save()
         return order
 
     def to_representation(self, instance):
-        return OrderSerializer(instance, context=self.context).data
+        representation = OrderSerializer(instance, context=self.context).data
+        representation['recommended_cartontype'] = (
+            instance.recommended_cartontype.cartontype
+        )
+        return representation

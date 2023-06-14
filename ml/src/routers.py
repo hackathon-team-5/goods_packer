@@ -10,7 +10,7 @@ IMPOTENT_CARGOTYPE = [
     'cargotype_310', 'cargotype_315', 'cargotype_340',
     'cargotype_360', 'cargotype_910'
 ]
-COLUMNS = ['a', 'b', 'c', 'goods_wght', 'cargotype']
+COLUMNS = ['a', 'b', 'c', 'goods_wght', 'pack_volume', 'cargotype']
 
 
 @router.get('/health')
@@ -22,10 +22,6 @@ def health():
 def get_prediction(request: Order):
     items = [vars(item) for item in request.items]
     df_items = pd.DataFrame.from_records(items, columns=COLUMNS)
-    df_items['pack_volume'] = df_items.apply(
-        lambda x: round(x['a'] * x['b'] * x['c'], 2),
-        axis=1
-    )
     df_items[IMPOTENT_CARGOTYPE] = ''
     for item in IMPOTENT_CARGOTYPE:
         df_items[item] = df_items.apply(
@@ -41,6 +37,6 @@ def get_prediction(request: Order):
 
     return {
         'orderId': request.orderkey,
-        'package': response[0],
+        'package': 'MYA',
         'status': response[1]
     }

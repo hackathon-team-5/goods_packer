@@ -22,9 +22,22 @@ def field_validator(obj: OrderedDict,
             )
 
 
-def sku_validator(self, list_sku):
+def sku_validator(self, list_sku: list) -> list | serializers.ValidationError:
     """
+    The function "sku_validator" takes in two parameters: "self", and a list
+    of product SKUs and their respective amounts.
 
+    The function iterates through each item in the list of SKUs and amounts.
+    For each item, the sku and count are extracted.
+
+    Then the function tries to retrieve an instance of the Sku model using the
+    sku. If the Sku is found, the function checks if there is enough stock by
+    retrieving the first in_stock object, and comparing its amount to the
+    count. If there is insufficient stock, an error is raised.
+
+    If the Sku does not exist, an error is raised.
+
+    Finally, the function returns the list of SKUs and amounts.
     """
     for item in list_sku:
         sku = item['sku']
