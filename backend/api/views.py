@@ -1,7 +1,8 @@
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 
-from .models import CargotypeInfo, Carton, CartonPrice, Order, Sku
+from .models import (CargotypeInfo, Carton, CartonPrice, Order, Sku,
+                     SkuCargotypes)
 from .serializers import (CargotypeInfoSerializer, CartonPriceSerializer,
                           CartonSerializer, OrderCreateSerializer,
                           SkuCargotypesSerializer, SkuSerializer)
@@ -32,6 +33,7 @@ class SkuViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class SkuCargotypesViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = SkuCargotypes.objects.all()
     permission_classes = (permissions.AllowAny,)
     serializer_class = SkuCargotypesSerializer
 
