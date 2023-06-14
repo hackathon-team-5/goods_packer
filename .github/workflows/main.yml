@@ -34,13 +34,15 @@ jobs:
     - name: Test with flake8 and django tests
       run: |
         python -m flake8
-        cd backend && python manage.py test
+        cd backend
+        python manage.py makemigrations
+        python manage.py test
 
   build_and_push_to_docker_hub_data_science:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     needs: tests
-    if: github.base_ref == 'refs/heads/data_science'
+    if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.base_ref == 'refs/heads/data_science'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -65,7 +67,7 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     needs: tests
-    if: github.base_ref == 'refs/heads/backend'
+    if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.base_ref == 'refs/heads/backend'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2

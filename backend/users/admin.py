@@ -18,7 +18,7 @@ class UserAdmin(admin.ModelAdmin):
             'fields': ('username', 'first_name', 'last_name')
         }),
         ('Идентификатор', {'fields': ('who',)}),
-        ('Пользовательская роль и статус', {'fields': ('role', 'status')}),
+        ('Пользовательская роль и статус', {'fields': ('role',)}),
     )
     search_fields = ('username',)
     list_filter = ('role',)
