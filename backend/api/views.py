@@ -41,4 +41,4 @@ class SkuCargotypesViewSet(viewsets.ReadOnlyModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     permission_classes = (permissions.AllowAny,)
-    serializer_class = OrderCreateSerializer
+    serializer_class = OrderSerializer
