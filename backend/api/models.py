@@ -168,7 +168,7 @@ class SkuInWhs(CreateUpdate):
         on_delete=models.CASCADE,
         related_name='in_stock',
     )
-    count = models.BigIntegerField(
+    amount = models.BigIntegerField(
         _('количество'),
     )
 
@@ -183,7 +183,12 @@ class SkuInWhs(CreateUpdate):
         )
 
 
-class Order(Create):
+class Order(CreateUpdate):
+    class Status(models.TextChoices):
+        FORMED = 'formed', _('Формируется')
+        COLLECTED = 'collected', _('Собирается')
+        READY = 'ready', _('Готов')
+
     whs = models.ForeignKey(
         Whs,
         on_delete=models.CASCADE,
@@ -204,6 +209,7 @@ class Order(Create):
     )
     box_num = models.IntegerField(
         _('количество коробок'),
+        default=0,
     )
     recommended_cartontype = models.ForeignKey(
         Carton,
@@ -215,30 +221,46 @@ class Order(Create):
     )
     sel_calc_cube = models.IntegerField(
         _('объём выбранной упаковки'),
+        default=0,
     )
     pack_volume = models.IntegerField(
         _('рассчитанный объём упакованных товаров'),
+        default=0,
     )
     rec_calc_cube = models.IntegerField(
         _('(?)'),
+        null=True,
+        blank=True,
     )
     goods_wght = models.FloatField(
         _('вес товара'),
+        default=0,
     )
     sku = models.ForeignKey(
         Sku,
         on_delete=models.CASCADE,
-        related_name='orders'
+        related_name='orders',
+        null=True,
+        blank=True,
     )
     who = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='orders',
         verbose_name=_('упаковщик'),
+        null=True,
+        blank=True,
     )
     trackingid = models.CharField(
         _('id доставки'),
         max_length=32,
+        blank=True,
+    )
+    status = models.CharField(
+        _('Статус'),
+        max_length=9,
+        choices=Status.choices,
+        default=Status.FORMED
     )
 
     class Meta:
@@ -247,3 +269,37 @@ class Order(Create):
 
     def __str__(self):
         return f'{self.orderkey}'
+
+
+class SkuInOrder(models.Model):
+
+    order = models.ForeignKey(
+        Order,
+        verbose_name=_('Ордер'),
+        related_name='qt_skus',
+        on_delete=models.CASCADE,
+    )
+    sku = models.ForeignKey(
+        Sku,
+        verbose_name=_('SKU'),
+        related_name='qt_orders',
+        on_delete=models.CASCADE,
+    )
+    amount = models.PositiveIntegerField(
+        _('Количество'),
+        default=0,
+    )
+
+    class Meta:
+        verbose_name = 'Sku in Order'
+        verbose_name_plural = 'Sku in Orders'
+        ordering = ('order', )
+        constraints = (
+            models.UniqueConstraint(
+                fields=('order', 'sku'),
+                name=('\n%(app_label)s_%(class)s_order_sku_unique'),
+            ),
+        )
+
+    def __str__(self) -> str:
+        return f'{self.order} {self.sku} {self.amount}'
