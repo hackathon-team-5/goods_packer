@@ -1,15 +1,31 @@
 import pickle
 
 import numpy as np
+import pandas as pd
 from config import BASE_DIR
 from fastapi import status
+from sklearn.calibration import LabelEncoder
+
+PACKS = {
+    'target': [
+        'STRETCH', 'NONPACK', 'MYC', 'MYE', 'error', 'YMA', 'MYA', 'MYB',
+        'MYD', 'YMG', 'MYF', 'YMC', 'YMW', 'YMF', 'YME', 'YMX', 'YMU', 'YMB',
+        'YMV', 'YMI', 'YMT', 'YMP']
+}
 
 
 def predict_1_item(x):
+    label_encoder = LabelEncoder()
+    target = pd.DataFrame.from_dict(PACKS)
+    label_encoder.fit_transform(target)
     try:
         with open(f'{BASE_DIR}/src/trained_model/model1.pcl', 'rb') as fid:
             model = pickle.load(fid)
-        result = (model.predict(x), status.HTTP_200_OK)
+        prediction = model.predict(x)
+        result = (
+            label_encoder.inverse_transform(prediction[0])[0],
+            status.HTTP_200_OK
+        )
     except OSError as error:
         result = (
             f'Failed to open the model file: {error}',
@@ -25,17 +41,17 @@ def predict_1_item(x):
 
 
 def predict_many_items(x):
+    label_encoder = LabelEncoder()
+    target = pd.DataFrame.from_dict(PACKS)
+    label_encoder.fit_transform(target)
     try:
         with open(f'{BASE_DIR}/src/trained_model/model2.pcl', 'rb') as fid:
-            model2 = pickle.load(fid)
-        result_first = model2.predict(x)
-
-        x_1 = np.column_stack((x, result_first))
-
-        with open(f'{BASE_DIR}/src/trained_model/model3.pcl', 'rb') as fid:
             model3 = pickle.load(fid)
-        result = (model3.predict(x_1), status.HTTP_200_OK)
-
+        prediction = model3.predict(x)
+        result = (
+            label_encoder.inverse_transform(prediction[0])[0],
+            status.HTTP_200_OK
+        )
     except OSError as error:
         result = (
             f'Failed to open the model file: {error}',
