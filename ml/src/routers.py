@@ -37,6 +37,6 @@ def get_prediction(request: Order):
 
     return {
         'orderId': request.orderkey,
-        'package': 'MYA',
+        'package': response[0],
         'status': response[1]
     }
