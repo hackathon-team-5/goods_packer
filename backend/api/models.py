@@ -199,25 +199,9 @@ class Order(CreateUpdate):
         _('id заказа'),
         max_length=32,
     )
-    selected_cartontype = models.ForeignKey(
-        Carton,
-        on_delete=models.CASCADE,
-        related_name='orders_selected_cartontype',
-        verbose_name=_('код упаковки, которая была выбрана пользователем'),
-        null=True,
-        blank=True,
-    )
     box_num = models.IntegerField(
         _('количество коробок'),
         default=0,
-    )
-    recommended_cartontype = models.ForeignKey(
-        Carton,
-        on_delete=models.CASCADE,
-        related_name='orders_recommended_cartontype',
-        verbose_name=_('код упаковки, рекомендованной алгоритмом'),
-        null=True,
-        blank=True,
     )
     sel_calc_cube = models.IntegerField(
         _('объём выбранной упаковки'),
@@ -289,17 +273,27 @@ class SkuInOrder(models.Model):
         _('Количество'),
         default=0,
     )
+    recommended_cartontype = models.ForeignKey(
+        Carton,
+        on_delete=models.CASCADE,
+        related_name='orders_sku_recommended_cartontype',
+        verbose_name=_('код упаковки, рекомендованной алгоритмом'),
+        null=True,
+        blank=True,
+    )
+    selected_cartontype = models.ForeignKey(
+        Carton,
+        on_delete=models.CASCADE,
+        related_name='orders_sku_selected_cartontype',
+        verbose_name=_('код упаковки, которая была выбрана пользователем'),
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = 'Sku in Order'
         verbose_name_plural = 'Sku in Orders'
         ordering = ('order', )
-        constraints = (
-            models.UniqueConstraint(
-                fields=('order', 'sku'),
-                name=('\n%(app_label)s_%(class)s_order_sku_unique'),
-            ),
-        )
 
     def __str__(self) -> str:
         return f'{self.order} {self.sku} {self.amount}'

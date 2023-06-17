@@ -32,7 +32,7 @@
 </ol>
 <ol>
 <p>backend:<br />
-<span style="text-align: justify;">Django~=4.0.10 djangorestframework~=3.14.0</span></p>
+<span style="text-align: justify;">Django, djangorestframework, PostgreSQL, gunicorn</span></p>
 </ol>
 <ol>
 <li>ссылки на сторонние фреймворки, библиотеки, иконки и шрифты если использовались</li>
