@@ -1,6 +1,5 @@
 import pickle
 
-import numpy as np
 import pandas as pd
 from config import BASE_DIR
 from fastapi import status

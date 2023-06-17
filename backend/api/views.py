@@ -4,8 +4,7 @@ from .models import (CargotypeInfo, Carton, CartonPrice, Order, Sku,
                      SkuCargotypes)
 from .serializers import (CargotypeInfoSerializer, CartonPriceSerializer,
                           CartonSerializer, OrderCreateSerializer,
-                          OrderSerializer, SkuCargotypesSerializer,
-                          SkuSerializer)
+                          SkuCargotypesSerializer, SkuSerializer)
 
 
 class CartonViewSet(viewsets.ReadOnlyModelViewSet):
