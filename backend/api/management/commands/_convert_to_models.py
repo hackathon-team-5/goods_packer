@@ -1,9 +1,10 @@
 from pathlib import Path
 
 import pandas as pd
-from api.models import CargotypeInfo, Carton, CartonPrice, Sku, SkuCargotypes
+from api.models import (CargotypeInfo, Carton, CartonPrice, Sku, SkuCargotypes,
+                        SkuInWhs, Whs)
 
-from .cleaners import nonzero, random_float
+from ._cleaners import get_image, nonzero, random_float
 
 HOME_PATH = f'{Path.home()}/Desktop/data'
 
@@ -28,7 +29,7 @@ MODEL_DATA = {
     CartonPrice: {
         'type': pd.read_excel,
         'file_name': 'carton_price.xlsx',
-        'model_fields': ['carton', 'cost'],
+        'model_fields': ['carton', 'price'],
         'file_fields': ['carton', 'cost'],
         'cleaner': [str, float],
         'getter': [
@@ -46,10 +47,10 @@ MODEL_DATA = {
     Sku: {
         'type': pd.read_csv,
         'file_name': 'sku.csv',
-        'model_fields': ['sku', 'a', 'b', 'c', 'weight'],
-        'file_fields': ['sku', 'a', 'b', 'c', 'weight'],
-        'cleaner': [str, nonzero, nonzero, nonzero, random_float],
-        'getter': [None, None, None, None, None],
+        'model_fields': ['sku', 'length', 'width', 'height', 'goods_wght', 'image'],
+        'file_fields': ['sku', 'a', 'b', 'c', 'weight', 'image'],
+        'cleaner': [str, nonzero, nonzero, nonzero, random_float, get_image],
+        'getter': [None, None, None, None, None, None],
     },
     SkuCargotypes: {
         'type': pd.read_csv,
@@ -58,6 +59,22 @@ MODEL_DATA = {
         'file_fields': ['sku', 'cargotype'],
         'cleaner': [str, int],
         'getter': [[Sku, 'sku'], [CargotypeInfo, 'cargotype']],
+    },
+    Whs: {
+        'type': pd.read_csv,
+        'file_name': 'whs.csv',
+        'model_fields': ['whs'],
+        'file_fields': ['whs'],
+        'cleaner': [str],
+        'getter': [None],
+    },
+    SkuInWhs: {
+        'type': pd.read_csv,
+        'file_name': 'skuinwhs.csv',
+        'model_fields': ['sku', 'whs', 'amount'],
+        'file_fields': ['sku', 'whs', 'count'],
+        'cleaner': [str, str, random_float],
+        'getter': [[Sku, 'sku'], [Whs, 'whs'], None],
     },
 }
 

@@ -2,7 +2,6 @@ from core.models import Create, CreateUpdate
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from sorl.thumbnail import ImageField
 
 User = get_user_model()
 
@@ -70,8 +69,15 @@ class CartonPrice(CreateUpdate):
         verbose_name = _('стоимость упаковки')
         verbose_name_plural = _('стоимость упаковок')
 
+        constraints = (
+            models.UniqueConstraint(
+                fields=('carton',),
+                name='%(app_label)s_%(class)s_carton_unique',
+            ),
+        )
+
     def __str__(self):
-        return f'{self.carton} - {self.cost}'
+        return f'{self.carton} - {self.price}'
 
 
 class Sku(Create):
@@ -80,30 +86,28 @@ class Sku(Create):
         max_length=256,
         unique=True,
     )
-    a = models.FloatField(
+    length = models.FloatField(
         _('длина'),
         default=0,
     )
-    b = models.FloatField(
+    width = models.FloatField(
         _('ширина'),
         default=0,
     )
-    c = models.FloatField(
+    height = models.FloatField(
         _('высота'),
         default=0,
     )
-    weight = models.FloatField(
+    goods_wght = models.FloatField(
         _('вес'),
         default=0,
     )
-    image = ImageField(
-        verbose_name=_('Картинка'),
-        upload_to='sku_images/',
-        null=True,
-        blank=True,
+    image = models.CharField(
+        _('URL на картинку'),
+        max_length=256,
     )
     description = models.TextField(
-        verbose_name=_('описание'),
+        _('описание'),
         null=True,
         blank=True,
     )
@@ -117,6 +121,7 @@ class Sku(Create):
 
 
 class SkuCargotypes(models.Model):
+    objects = None
     sku = models.ForeignKey(
         Sku,
         on_delete=models.CASCADE,
@@ -139,55 +144,107 @@ class SkuCargotypes(models.Model):
         )
 
 
-class Order(Create):
-    whs = models.IntegerField(
-        _('код сортировочного центра'),
+class Whs(models.Model):
+    whs = models.CharField(
+        _('название сортировочного центра'),
+        max_length=256,
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = _('количество товара на складе')
+        verbose_name_plural = _('количество товаров на складе')
+
+
+class SkuInWhs(CreateUpdate):
+    sku = models.ForeignKey(
+        Sku,
+        on_delete=models.CASCADE,
+        related_name='in_stock'
+
+    )
+    whs = models.ForeignKey(
+        Whs,
+        on_delete=models.CASCADE,
+        related_name='in_stock',
+    )
+    amount = models.BigIntegerField(
+        _('количество'),
+    )
+
+    class Meta:
+        verbose_name = _('количество товара на складе')
+        verbose_name_plural = _('количество товаров на складе')
+        constraints = (
+            models.UniqueConstraint(
+                fields=('sku', 'whs'),
+                name='%(app_label)s_%(class)s_sku_whs_unique',
+            ),
+        )
+
+
+class Order(CreateUpdate):
+    class Status(models.TextChoices):
+        FORMED = 'formed', _('Формируется')
+        COLLECTED = 'collected', _('Собирается')
+        READY = 'ready', _('Готов')
+
+    whs = models.ForeignKey(
+        Whs,
+        on_delete=models.CASCADE,
+        related_name='orders',
+        verbose_name=_('код сортировочного центра'),
     )
     orderkey = models.CharField(
         _('id заказа'),
         max_length=32,
     )
-    selected_cartontype = models.ForeignKey(
-        Carton,
-        on_delete=models.CASCADE,
-        related_name='orders_selected_cartontype',
-        verbose_name=_('код упаковки, которая была выбрана пользователем'),
-    )
     box_num = models.IntegerField(
         _('количество коробок'),
-    )
-    recommended_cartontype = models.ForeignKey(
-        Carton,
-        on_delete=models.CASCADE,
-        related_name='orders_recommended_cartontype',
-        verbose_name=_('код упаковки, рекомендованной алгоритмом'),
+        default=0,
     )
     sel_calc_cube = models.IntegerField(
         _('объём выбранной упаковки'),
+        default=0,
     )
     pack_volume = models.IntegerField(
         _('рассчитанный объём упакованных товаров'),
+        default=0,
     )
     rec_calc_cube = models.IntegerField(
         _('(?)'),
+        null=True,
+        blank=True,
     )
     goods_wght = models.FloatField(
         _('вес товара'),
+        default=0,
     )
     sku = models.ForeignKey(
         Sku,
         on_delete=models.CASCADE,
-        related_name='orders'
+        related_name='orders',
+        null=True,
+        blank=True,
     )
     who = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='orders',
         verbose_name=_('упаковщик'),
+        null=True,
+        blank=True,
     )
     trackingid = models.CharField(
         _('id доставки'),
         max_length=32,
+        blank=True,
+    )
+    status = models.CharField(
+        _('Статус'),
+        max_length=9,
+        choices=Status.choices,
+        default=Status.FORMED
     )
 
     class Meta:
@@ -196,3 +253,47 @@ class Order(Create):
 
     def __str__(self):
         return f'{self.orderkey}'
+
+
+class SkuInOrder(models.Model):
+
+    order = models.ForeignKey(
+        Order,
+        verbose_name=_('Ордер'),
+        related_name='qt_skus',
+        on_delete=models.CASCADE,
+    )
+    sku = models.ForeignKey(
+        Sku,
+        verbose_name=_('SKU'),
+        related_name='qt_orders',
+        on_delete=models.CASCADE,
+    )
+    amount = models.PositiveIntegerField(
+        _('Количество'),
+        default=0,
+    )
+    recommended_cartontype = models.ForeignKey(
+        Carton,
+        on_delete=models.CASCADE,
+        related_name='orders_sku_recommended_cartontype',
+        verbose_name=_('код упаковки, рекомендованной алгоритмом'),
+        null=True,
+        blank=True,
+    )
+    selected_cartontype = models.ForeignKey(
+        Carton,
+        on_delete=models.CASCADE,
+        related_name='orders_sku_selected_cartontype',
+        verbose_name=_('код упаковки, которая была выбрана пользователем'),
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = 'Sku in Order'
+        verbose_name_plural = 'Sku in Orders'
+        ordering = ('order', )
+
+    def __str__(self) -> str:
+        return f'{self.order} {self.sku} {self.amount}'

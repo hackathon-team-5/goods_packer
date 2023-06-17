@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.utils.safestring import mark_safe
 
 from .models import (CargotypeInfo, Carton, CartonPrice, Order, Sku,
-                     SkuCargotypes)
+                     SkuCargotypes, SkuInWhs, Whs)
 
 User = get_user_model()
 
@@ -55,8 +55,22 @@ class SkuAdmin(admin.ModelAdmin):
 
     def preview(self, obj):
         return mark_safe(
-            f'<img src="{obj.image.url}" style="max-height: 200px;">'
+            f'<img src="{obj.image}" style="max-height: 200px;">'
         )
+
+
+class WhsSkuInline(admin.StackedInline):
+    model = SkuInWhs
+    extra = 0
+
+
+@admin.register(Whs)
+class WhsAdmin(admin.ModelAdmin):
+    list_display = (
+        'whs',
+    )
+    empty_value_display = '-пусто-'
+    inlines = (WhsSkuInline,)
 
 
 @admin.register(Order)

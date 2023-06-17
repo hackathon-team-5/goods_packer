@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
-import socket
 from pathlib import Path
 
 from core.utils import key_generator
@@ -50,13 +49,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Swagger generator
+    'drf_yasg',
     # API apps
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
     'django_filters',
-    # images
-    'sorl.thumbnail',
     # my app
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
