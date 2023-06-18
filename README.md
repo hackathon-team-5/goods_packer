@@ -25,9 +25,51 @@
 </table>
 
 <ol>
-<li>сведения о команде</li>
+<li>сведения о команде:</li>
+<br>
+<ol>
+<p>Christina Antonova - Project Manager</p>
+    
+<p>Alina Surovtseva - Designer</p>
+<p>Anastasia Miagkova- Designer</p>
+
+<p>Borokin Andrey - Backend developer</p>
+<p>Dmitrii Annsjaw - Backend developer</p>
+    
+<p>Aleksandr Ivanov - Data Science</p>
+<p>Aleksandr Ivanov - Data Science</p>
+<p>Anastacia Khisamieva - Data Science</p>
+    
+<p>Pavel Rudokopov - Frontend developer</p>
+<p>Evgeniia Anikeeva - Frontend developer</p>
+
+</ol>
 <li>ссылка на Github Pages</li>
 <li>инструкция по сборке и запуску</li>
+<ol>
+<br>
+Установите на сервере docker и docker-compose-plugin;
+    
+Клонируйте репозитарий
+    
+```
+git clone https://github.com/hackathon-team-5/goods_packer.git
+```
+    
+Перейдите в папку `infra/`;
+
+```
+cd goods_packer/infra/
+```
+Создайте файл `.env`. Шаблон для заполнения файла находится в `.env.example`, оставив без изменения `DOCKER_USERNAME=expext`
+    
+Запустите проект
+
+```
+docker compose up -d --build
+```
+
+</ol>    
 <li>стэк технологий</li>
 </ol>
 <ol>
