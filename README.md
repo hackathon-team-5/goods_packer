@@ -29,19 +29,20 @@
 <br>
 <ol>
 <p>Christina Antonova - Project Manager</p>
-    
+
 <p>Alina Surovtseva - Designer</p>
 <p>Anastasia Miagkova- Designer</p>
 
-<p>Borokin Andrey - Backend developer</p>
-<p>Dmitrii Annsjaw - Backend developer</p>
-    
-<p>Aleksandr Ivanov - Data Science</p>
-<p>Aleksandr Ivanov - Data Science</p>
+[Andrey Borokin - Backend developer](https://github.com/exp-ext)
+
+[Дима Ротанин - Backend developer](https://github.com/Annsjaw)
+
+<p>Александр Иванов - Data Science</p>
+<p>Александр Юмрин - Data Science</p>
 <p>Anastacia Khisamieva - Data Science</p>
     
-<p>Pavel Rudokopov - Frontend developer</p>
-<p>Evgeniia Anikeeva - Frontend developer</p>
+<p>Павел Узунянц - Frontend developer</p>
+<p>Павел Завезёнов - Frontend developer</p>
 
 </ol>
 <li>ссылка на Github Pages</li>
