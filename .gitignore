@@ -136,5 +136,4 @@ migrations/
 
 docker-compose-debug.yml
 Dockerfile-debug
-db.json
 .vscode

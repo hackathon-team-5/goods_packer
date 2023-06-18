@@ -70,6 +70,30 @@ cd goods_packer/infra/
 docker compose up -d --build
 ```
 
+Выполните миграции и загрузите тестовые данные
+
+```
+docker compose exec backend python3 manage.py makemigrations
+
+docker compose exec backend python3 manage.py migrate --noinput
+
+docker compose exec backend python manage.py loaddata db.json
+```
+
+
+Redoc будут доступен:
+
+```
+http://127.0.0.1:8000/api/redoc/
+```
+
+API
+
+```
+http://127.0.0.1:8000/api/
+```
+
+
 </ol>    
 <li>стэк технологий</li>
 </ol>

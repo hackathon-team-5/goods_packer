@@ -51,7 +51,6 @@ services:
       - media_volume:/var/html/media/:rw
     depends_on:
       - backend
-      - frontend
     env_file:
       - ./.env
 
