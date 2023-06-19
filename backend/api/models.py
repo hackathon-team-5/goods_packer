@@ -197,7 +197,7 @@ class Order(CreateUpdate):
     )
     orderkey = models.CharField(
         _('id заказа'),
-        max_length=32,
+        max_length=128,
     )
     box_num = models.IntegerField(
         _('количество коробок'),
