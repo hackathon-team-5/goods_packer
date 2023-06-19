@@ -15,7 +15,7 @@ PACKS = {
 
 def predict_1_item(x):
     label_encoder = LabelEncoder()
-    target = pd.DataFrame.from_dict(PACKS)
+    target = pd.DataFrame.from_dict(PACKS).values.ravel()
     label_encoder.fit_transform(target)
     try:
         with open(f'{BASE_DIR}/src/trained_model/model1.pcl', 'rb') as fid:
