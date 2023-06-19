@@ -1,28 +1,113 @@
 {
-  "packageInfo": {
-    "id": 0,
-    "count": 4,
-    "type": "YMF"
-  },
-  "products": [
-    {
-      "image": "https://images.unsplash.com/photo-1545454675-3531b543be5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80&auto=format&fit=crop&w=800&q=60",
-      "title": "Умная колонка Яндекс Станция Лайт, ультрафиолет",
-      "barcode": ["9234 5678 234 32"],
-      "type": "Пузырчатая пленка",
-      "count": 1
-    },
-    {
-      "image": "https://images.unsplash.com/photo-1686121103438-04525a505750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60",
-      "title": "Тарелка. Императорский фарфоровый завод. Форма 'Стандартная - 2', рисунок 'Скарлетт 2'. Костяной фарфор . 270 мм.",
-      "barcode": [
-        "9234 5678 234 33",
-        "9234 5678 234 34",
-        "9234 5678 234 35",
-        "9234 5678 234 36"
-      ],
-      "type": "Пузырчатая пленка",
-      "count": 3
-    }
-  ]
+    "whs": 1,
+    "orderkey": "0b3be957-5e67-4078-9b4c-8921443f4fa7",
+    "box_num": 0,
+    "sel_calc_cube": 0,
+    "pack_volume": 254929,
+    "rec_calc_cube": null,
+    "goods_wght": 183.67000000000002,
+    "skus": [
+        {
+            "id": 5,
+            "sku": {
+                "sku": "1aa37d1fc3842659cc1a02ae277fd96c",
+                "a": 96.0,
+                "b": 18.0,
+                "c": 56.0,
+                "goods_wght": 20.13,
+                "image": "https://random.dog/07fcc953-0502-4cb6-bc0e-9b9d6904442d.jpg",
+                "cargotypes": [
+                    {
+                        "cargotype": {
+                            "cargotype": 290,
+                            "description": "Склад МГТ (малогабаритный товар)"
+                        }
+                    }
+                ],
+                "description": null
+            },
+            "amount": 3,
+            "recommended_cartontype": {
+                "cartontype": "MYB",
+                "length": 22.0,
+                "width": 32.0,
+                "height": 4.9,
+                "displayrfpack": true
+            },
+            "selected_cartontype": null
+        },
+        {
+            "id": 31,
+            "sku": {
+                "sku": "997a8408e2740478cb380e0818dfca77",
+                "a": 84.01,
+                "b": 79.33,
+                "c": 21.04,
+                "goods_wght": 81.45,
+                "image": "https://random.dog/1573beb6-6c9f-4705-95c9-7878c7c2e8d8.jpg",
+                "cargotypes": [
+                    {
+                        "cargotype": {
+                            "cargotype": 410,
+                            "description": "опасный Авиа"
+                        }
+                    },
+                    {
+                        "cargotype": {
+                            "cargotype": 290,
+                            "description": "Склад МГТ (малогабаритный товар)"
+                        }
+                    },
+                    {
+                        "cargotype": {
+                            "cargotype": 691,
+                            "description": "цена средняя"
+                        }
+                    }
+                ],
+                "description": null
+            },
+            "amount": 1,
+            "recommended_cartontype": {
+                "cartontype": "MYB",
+                "length": 22.0,
+                "width": 32.0,
+                "height": 4.9,
+                "displayrfpack": true
+            },
+            "selected_cartontype": null
+        },
+        {
+            "id": 13,
+            "sku": {
+                "sku": "387ae4cbf1196a15b586e8e43d3319a6",
+                "a": 46.0,
+                "b": 13.0,
+                "c": 30.0,
+                "goods_wght": 82.09,
+                "image": "https://random.dog/c5a493db-526c-4563-9e97-f12b36d592d6.jpg",
+                "cargotypes": [
+                    {
+                        "cargotype": {
+                            "cargotype": 360,
+                            "description": "упаковка в пленку"
+                        }
+                    }
+                ],
+                "description": ""
+            },
+            "amount": 2,
+            "recommended_cartontype": {
+                "cartontype": "STRETCH",
+                "length": 0.0,
+                "width": 0.0,
+                "height": 0.0,
+                "displayrfpack": true
+            },
+            "selected_cartontype": null
+        }
+    ],
+    "who": 1,
+    "trackingid": "76",
+    "status": "formed"
 }

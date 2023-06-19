@@ -6,7 +6,6 @@ import buttonIcon from "../../images/chevron.svg";
 const Product = (props) => {
   const { title, cardImg, type, codes, count } = props;
   const [isShowList, setShowList] = useState(false);
-
   const handleShowList = useCallback(() => {
     setShowList((prevState) => !prevState);
   }, []);
@@ -23,7 +22,7 @@ const Product = (props) => {
             <Progressbar value={1} maxValue={count} type="goods" />
           </span>
           {codes.length <= 1 ? (
-            <button className="product-container__barcode">{codes[0]}</button>
+            <button className="product-container__barcode">{codes}</button>
           ) : (
             <button
               type="button"

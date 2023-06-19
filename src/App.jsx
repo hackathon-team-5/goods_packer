@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<Main data={data} />} />
         <Route
           path="/scan"
-          element={<Skanning typeBox={data.packageInfo.type} />}
+          element={<Skanning typeBox={data.recommended_cartontype} />}
         />
         <Route path="/completetion" element={<Completion />} />
       </Routes>

@@ -5,6 +5,8 @@ import Card from "../Card";
 
 const Content = (props) => {
   const { data } = props;
+  let amount = 0;
+  data.skus.map( obj => amount = amount + obj.amount);
   return (
     <section className="content">
       <button className="big-button content__issue-button">
@@ -22,7 +24,7 @@ const Content = (props) => {
         <ul className="content__info-container-list">
           <li className="content__info-container-list-item">
             <p className="content__info-container-list-item-paragraph">
-              {data.packageInfo.count} товаров
+              {amount} товаров
             </p>
           </li>
           <li className="content__info-container-list-item">
