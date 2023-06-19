@@ -1,0 +1,78 @@
+.scanningbox {
+  margin-top: 346px;
+  display: flex;
+  justify-content: center;
+}
+
+.scanningbox__container {
+  display: flex;
+  flex-direction: column;
+  width: 828px;
+  text-align: center;
+}
+
+.scanningbox__text {
+  margin: 0 auto;
+  font-family: YandexSansDisplay-Bold;
+  line-height: 68px;
+  font-size: 56px;
+  color: #212121;
+}
+
+.scanningbox__text-accent {
+  margin: 0 auto 0 12px;
+  font-family: YandexSansDisplay-Bold;
+  line-height: 68px;
+  font-size: 56px;
+  color: #fefefe;
+  border-radius: 12px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.scanningbox__button {
+  all: unset;
+  margin-top: 62px;
+  color: #0044ee;
+  cursor: pointer;
+}
+
+.scanningbox__button-link {
+  all: unset;
+}
+
+.scanningbox__text-accent_theme_red {
+  background-color: #ff0000;
+}
+
+.scanningbox__text-accent_theme_golden {
+  background-color: #f29a00;
+}
+
+.scanningbox__text-accent_theme_purple {
+  background-color: #8a35b3;
+}
+
+.scanningbox__text-accent_theme_green {
+  background-color: #16523b;
+}
+
+.scanningbox__text-accent_theme_coral {
+  background-color: #f73e47;
+}
+
+.scanningbox__text-accent_theme_darkred {
+  background-color: #a7070f;
+}
+
+.scanningbox__text-accent_theme_azure {
+  background-color: #25add6;
+}
+
+.scanningbox__text-accent_theme_yellow {
+  background-color: #f5c401;
+}
+
+.scanningbox__text-accent_theme_brown {
+  background-color: #5d4a00;
+}
