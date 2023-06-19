@@ -1,5 +1,6 @@
 import "./Сompletion.css";
 import ImageQualityIndexPath from "../../images/Quality_Index.svg";
+import { Link } from "react-router-dom";
 function Сompletion() {
   return (
     <div className="completion">
@@ -14,7 +15,11 @@ function Сompletion() {
           Упакуйте товары и поставьте коробку на конвейер
         </p>
       </div>
-      <button className="big-button completion__button">Готово</button>
+      <button className="big-button completion__button">
+        <Link className="completion__button-link" to="/">
+          Готово
+        </Link>
+      </button>
     </div>
   );
 }

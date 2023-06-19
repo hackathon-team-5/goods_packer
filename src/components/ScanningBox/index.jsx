@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./ScanningBox.css";
 
 const ScanningBox = ({ typeBox }) => {
@@ -29,6 +30,11 @@ const ScanningBox = ({ typeBox }) => {
           Упакуйте товары и&nbsp;сканируйте коробку
           <span className={scanningboxTextAccent}>{typeBox}</span>
         </p>
+        <button type="button" className="scanningbox__button">
+          <Link to="/order" className="scanningbox__button-link">
+            Жми сюда, чтобы сканировать коробку
+          </Link>
+        </button>
       </div>
     </div>
   );

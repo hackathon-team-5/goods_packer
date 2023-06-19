@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 
 const Skanning = (props) => {
   const { typeBox } = props;
+  console.log(typeBox);
   return (
     <>
       <Header />

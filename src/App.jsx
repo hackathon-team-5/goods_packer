@@ -28,10 +28,14 @@ function App() {
       <CardsContext.Provider value={{ completedCards, setCompletedCards }}>
         <CompletedContext.Provider value={{ isCompleted }}>
           <Routes>
-            <Route path="/" element={<Main data={data} />} />
+            <Route path="/order" element={<Main data={data} />} />
             <Route
-              path="/scan"
-              element={<Skanning typeBox={data.recommended_cartontype} />}
+              path="/"
+              element={
+                <Skanning
+                  typeBox={data.skus[0].recommended_cartontype.cartontype}
+                />
+              }
             />
             <Route path="/completetion" element={<Completion />} />
           </Routes>

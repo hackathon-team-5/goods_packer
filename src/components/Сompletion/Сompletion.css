@@ -33,3 +33,7 @@
   margin-right: 24px;
   background-color: #fed42b;
 }
+
+.completion__button-link {
+  all: unset;
+}

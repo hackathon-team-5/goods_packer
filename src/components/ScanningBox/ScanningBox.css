@@ -30,6 +30,17 @@
   padding-right: 24px;
 }
 
+.scanningbox__button {
+  all: unset;
+  margin-top: 62px;
+  color: #0044ee;
+  cursor: pointer;
+}
+
+.scanningbox__button-link {
+  all: unset;
+}
+
 .scanningbox__text-accent_theme_red {
   background-color: #ff0000;
 }
