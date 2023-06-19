@@ -82,9 +82,7 @@ class OrderAdmin(admin.ModelAdmin):
         ('Основное', {'fields': ('sku', 'whs', 'orderkey')}),
         ('Информация об упаковке', {
             'fields': (
-                'recommended_cartontype',
                 'pack_volume',
-                'selected_cartontype',
                 'sel_calc_cube',
                 'box_num',
                 'goods_wght',
