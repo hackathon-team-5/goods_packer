@@ -31,7 +31,7 @@ services:
       - ./.env
 
   frontend:
-    image: ${DOCKER_USERNAME}/foodgram-frontend:latest
+    image: ${DOCKER_USERNAME}/goods_packer-frontend:latest
     volumes:
       - frontend_volume:/app/result_build/build/:rw
     depends_on:
