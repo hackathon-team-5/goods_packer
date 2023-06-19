@@ -59,6 +59,10 @@
   text-align: center;
 }
 
+.big-button_active {
+  background-color: #fed42b;
+}
+
 .content__issue-button {
   margin-left: 24px;
 }

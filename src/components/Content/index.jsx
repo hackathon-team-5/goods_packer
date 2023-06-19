@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Content.css";
 import Progressbar from "../ProgressBar";
 import Card from "../Card";
+import { CompletedContext } from "../../contexts/CompletedContext";
 
 const Content = (props) => {
+  const { isCompleted } = useContext(CompletedContext);
   const { data } = props;
   let amount = 0;
-  data.skus.map( obj => amount = amount + obj.amount);
+  data.skus.map((obj) => (amount = amount + obj.amount));
   return (
     <section className="content">
       <button className="big-button content__issue-button">
@@ -35,7 +37,13 @@ const Content = (props) => {
         </ul>
         <Card data={data} />
       </div>
-      <button className="big-button content__sucess-button">
+      <button
+        className={
+          isCompleted
+            ? "big-button content__sucess-button big-button_active"
+            : "big-button content__sucess-button"
+        }
+      >
         Закрыть упаковку
       </button>
     </section>

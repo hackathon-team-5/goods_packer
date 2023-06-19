@@ -1,12 +1,20 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import "./Product.css";
 import Progressbar from "../ProgressBar";
 import buttonIcon from "../../images/chevron.svg";
+import { CardsContext } from "../../contexts/CardsContext";
 
 const Product = (props) => {
-  const { title, cardImg, type, codes, count } = props;
+  const { setCompletedCards } = useContext(CardsContext);
+  const { id, title, cardImg, type, codes, count } = props;
   const [isShowList, setShowList] = useState(false);
   const [counter, setCount] = useState(0);
+
+  useEffect(() => {
+    if (count === counter) {
+      setCompletedCards((prevCompletedCards) => [...prevCompletedCards, id]);
+    }
+  }, [counter]);
 
   const addNewItem = () => {
     if (counter < count) {

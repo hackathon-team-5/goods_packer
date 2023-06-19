@@ -6,12 +6,7 @@ const Card = (props) => {
   const { data } = props;
   let amount = 0;
   data.skus.map((obj) => (amount = amount + obj.amount));
-  const codes = [
-    "9234 5678 234 32",
-    "9234 5678 234 34",
-    "9234 5678 234 33",
-    "9234 5678 234 35",
-  ];
+
   return (
     <div className="card-container">
       <h4 className="card-container__title">Упаковка {data.box_num}</h4>
@@ -31,10 +26,10 @@ const Card = (props) => {
         return (
           <Product
             key={index}
+            id={card.id}
             title={card.sku.sku}
             cardImg={card.sku.image}
             type={card.sku.cargotypes}
-            codes={codes}
             count={card.amount}
           />
         );
