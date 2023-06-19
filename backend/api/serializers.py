@@ -5,6 +5,7 @@ from typing import OrderedDict
 
 import requests
 from core.validators import field_validator, sku_validator
+from django.conf import settings
 from django.db import transaction
 from django.db.models import Sum
 from rest_framework import serializers
@@ -286,8 +287,12 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         Updates the recommended box type `recommended_cartontype`
         for items in the order.
         """
+        url = (
+            'http://localhost:8080/pack/'
+            if settings.DEBUG else 'http://ml:8080/pack/'
+        )
         response = requests.post(
-            url="http://127.0.0.1:8080/pack/",
+            url=url,
             json=ml_pack
         )
         model_prediction = json.loads(response.text).get('package', None)
