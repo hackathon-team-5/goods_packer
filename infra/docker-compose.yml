@@ -30,6 +30,15 @@ services:
     env_file:
       - ./.env
 
+  frontend:
+    image: ${DOCKER_USERNAME}/goods_packer-frontend:latest
+    volumes:
+      - frontend_volume:/app/result_build/build/:rw
+    depends_on:
+      - backend
+    env_file:
+      - ./.env
+
   ml:
     image: ${DOCKER_USERNAME}/goods_packer-ml:latest
     ports:
@@ -51,6 +60,7 @@ services:
       - media_volume:/var/html/media/:rw
     depends_on:
       - backend
+      - frontend
     env_file:
       - ./.env
 
