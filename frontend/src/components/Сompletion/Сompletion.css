@@ -1,0 +1,39 @@
+.completion {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.completion__container {
+  display: flex;
+  margin: 0 auto 0 594px;
+  flex-direction: column;
+  align-self: center;
+}
+
+.completion__img {
+  margin: 0 auto;
+}
+
+.completion__header {
+  margin: 67px auto 16px auto;
+  font-family: YandexSansDisplay-Bold;
+  line-height: 68px;
+  font-size: 56px;
+}
+
+.completion__text {
+  margin: 0 auto;
+  font-family: YandexSansDisplay-Regular;
+  line-height: 32px;
+  font-size: 28px;
+}
+
+.completion__button {
+  margin-right: 24px;
+  background-color: #fed42b;
+}
+
+.completion__button-link {
+  all: unset;
+}
