@@ -6,6 +6,15 @@ import buttonIcon from "../../images/chevron.svg";
 const Product = (props) => {
   const { title, cardImg, type, codes, count } = props;
   const [isShowList, setShowList] = useState(false);
+  const [counter, setCount] = useState(0);
+
+  const addNewItem = () => {
+    if (counter < count) {
+      setCount((prevCount) => prevCount + 1);
+    } else {
+      return;
+    }
+  };
 
   const generateRandomNumber = () => {
     let number = "";
@@ -41,9 +50,9 @@ const Product = (props) => {
             })}
           </h4>
           <span className="product-container__count">
-            <Progressbar value={0} maxValue={count} type="goods" />
+            <Progressbar value={counter} maxValue={count} type="goods" />
           </span>
-          <button className="product-container__barcode">
+          <button onClick={addNewItem} className="product-container__barcode">
             {generateRandomNumber()}
           </button>
           {/* {codes.length <= 1 ? (
