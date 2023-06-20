@@ -3,8 +3,9 @@ import "./App.css";
 import Main from "./pages/Main";
 import Skanning from "./pages/Skanning";
 import Completion from "./pages/Completion";
+import { getInfo } from "./utils/api";
 
-import data from "./products.json";
+import localData from "./products.json";
 import { CardsContext } from "./contexts/CardsContext";
 import { useEffect, useState } from "react";
 import { CompletedContext } from "./contexts/CompletedContext";
@@ -12,6 +13,16 @@ import { CompletedContext } from "./contexts/CompletedContext";
 function App() {
   const [completedCards, setCompletedCards] = useState([]);
   const [isCompleted, setCompleted] = useState(false);
+  const [data, setData] = useState(localData);
+
+  useEffect(() => {
+    getInfo().then(res => {
+      if (res) {
+        setData(res);
+      }
+    });
+  }, [])
+  
 
   useEffect(() => {
     const jsonData = data.skus.map((sku) => sku.id);
